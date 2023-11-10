@@ -11,6 +11,12 @@ public class EnemyDesignerWindow : EditorWindow
     Texture2D warriorSectionTexture;
 
     Color headerSectionColor = new Color(13f / 255f, 32f / 255f, 44f / 255f, 1f);
+    Color mageSectionColor = new Color(255f / 255f, 153f / 255f, 51f / 255f, 1f);
+    Color warriorSectionColor = new Color(51f / 255f, 51f / 255f, 255f / 255f, 1f);
+    Color rogueSectionColor = new Color(255f / 255f, 102f / 255f, 102f / 255f, 1f);
+
+
+
 
     Rect headerSection;
     Rect mageSection;
@@ -47,6 +53,25 @@ public class EnemyDesignerWindow : EditorWindow
         headerSectionTexture = new Texture2D(1, 1);   //new texture 2d, 1 pixel wide and high
         headerSectionTexture.SetPixel(0, 0, headerSectionColor);  //(0,0) position, headerSectionColor is a color variable defined above
         headerSectionTexture.Apply();
+
+        mageSectionTexture = new Texture2D(1,1);
+        mageSectionTexture.SetPixel(0, 0, mageSectionColor);
+        mageSectionTexture.Apply();
+
+
+        rogueSectionTexture = new Texture2D(1, 1);
+        rogueSectionTexture.SetPixel(0, 0, rogueSectionColor);
+        rogueSectionTexture.Apply();
+
+
+        warriorSectionTexture = new Texture2D(1, 1);
+        warriorSectionTexture.SetPixel(0, 0, warriorSectionColor);
+        warriorSectionTexture.Apply();
+
+
+        //rogueSectionTexture = Resources.Load<Texture2D>("icons/editor_rogue_gradient");
+        //warriorSectionTexture = Resources.Load<Texture2D>("icons/editor_warrior_gradient");
+
     }
 
     /// <summary>
@@ -72,10 +97,29 @@ public class EnemyDesignerWindow : EditorWindow
         //50 pixels high, width of screeen no matter the screen resized or not
         headerSection.x = 0; 
         headerSection.y = 0;
-        headerSection.width = Screen.width;
+        headerSection.width = position.width;
         headerSection.height = 50;
 
+        mageSection.x = 0;
+        mageSection.y = 50;
+        mageSection.width = position.width/3f;
+        mageSection.height = position.height - 50;
+
+        warriorSection.x = position.width / 3f;
+        warriorSection.y = 50;
+        warriorSection.width = position.width / 3f;
+        warriorSection.height = position.height - 50;
+
+        rogueSection.x = (position.width / 3f) * 2;
+        rogueSection.y = 50;
+        rogueSection.width = position.width / 3f;
+        rogueSection.height = position.height - 50;
+
         GUI.DrawTexture(headerSection, headerSectionTexture);
+        GUI.DrawTexture(mageSection, mageSectionTexture);
+        GUI.DrawTexture(warriorSection, warriorSectionTexture);
+        GUI.DrawTexture(rogueSection, rogueSectionTexture);
+
     }
 
     /// <summary>
@@ -83,7 +127,9 @@ public class EnemyDesignerWindow : EditorWindow
     /// </summary>
     void DrawHeaders()
     {
-
+        GUILayout.BeginArea(headerSection);
+        GUILayout.Label("Enemy Designer");
+        GUILayout.EndArea();
     }
 
     /// <summary>
@@ -91,7 +137,9 @@ public class EnemyDesignerWindow : EditorWindow
     /// </summary>
     void DrawMageSettings()
     {
-
+        GUILayout.BeginArea(mageSection);
+        GUILayout.Label("Mage");
+        GUILayout.EndArea();
     }
 
     /// <summary>
@@ -99,7 +147,9 @@ public class EnemyDesignerWindow : EditorWindow
     /// </summary>
     void DrawRogueSettings()
     {
-
+        GUILayout.BeginArea(rogueSection);
+        GUILayout.Label("Rogue");
+        GUILayout.EndArea();
     }
 
     /// <summary>
@@ -107,7 +157,9 @@ public class EnemyDesignerWindow : EditorWindow
     /// </summary>
     void DrawWarriorSettings()
     {
-
+        GUILayout.BeginArea(warriorSection);
+        GUILayout.Label("Warrior");
+        GUILayout.EndArea();
     }
 
 
