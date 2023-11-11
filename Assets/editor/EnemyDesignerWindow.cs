@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
+using Types;
 
 public class EnemyDesignerWindow : EditorWindow
 {
@@ -15,15 +15,20 @@ public class EnemyDesignerWindow : EditorWindow
     Color warriorSectionColor = new Color(51f / 255f, 51f / 255f, 255f / 255f, 1f);
     Color rogueSectionColor = new Color(255f / 255f, 102f / 255f, 102f / 255f, 1f);
 
-
-
-
     Rect headerSection;
     Rect mageSection;
     Rect rogueSection;
     Rect warriorSection;
 
-[MenuItem("Window/ Enemy Designer")]    //Attribute, passes string value that represents where the window is accessible through via toolbar
+    static MageData mageData;
+    static RogueData rogueData;
+    static WarriorData warriorData;
+
+    public static MageData MageInfo { get { return mageData; } }
+    public static RogueData RogueInfo { get { return rogueData; } }
+    public static WarriorData WarriorInfo { get { return warriorData; } }
+
+    [MenuItem("Window/ Enemy Designer")]    //Attribute, passes string value that represents where the window is accessible through via toolbar
     static void OpenWindow()    //static function for opening a window
     {
         //Get window call, set it to castsed version of the window, "typeof" accepts a type of parameter which is my class
@@ -42,7 +47,17 @@ public class EnemyDesignerWindow : EditorWindow
     void OnEnable()
     {
         InitTextures();
+        InitData();
         
+    }
+
+    //initiliaze scriptable objects and cast it to the datatype
+    public static void InitData()
+    {
+        mageData = (MageData)ScriptableObject.CreateInstance(typeof(MageData));
+        rogueData = (RogueData)ScriptableObject.CreateInstance(typeof(RogueData));
+        warriorData = (WarriorData)ScriptableObject.CreateInstance(typeof(WarriorData));
+
     }
 
     /// <summary>
@@ -58,11 +73,9 @@ public class EnemyDesignerWindow : EditorWindow
         mageSectionTexture.SetPixel(0, 0, mageSectionColor);
         mageSectionTexture.Apply();
 
-
         rogueSectionTexture = new Texture2D(1, 1);
         rogueSectionTexture.SetPixel(0, 0, rogueSectionColor);
         rogueSectionTexture.Apply();
-
 
         warriorSectionTexture = new Texture2D(1, 1);
         warriorSectionTexture.SetPixel(0, 0, warriorSectionColor);
@@ -139,6 +152,23 @@ public class EnemyDesignerWindow : EditorWindow
     {
         GUILayout.BeginArea(mageSection);
         GUILayout.Label("Mage");
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Weapon");
+        mageData.wpnType = (MageWpnType)EditorGUILayout.EnumPopup(mageData.wpnType);
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Damage");
+        mageData.dmgType = (MageDmgType)EditorGUILayout.EnumPopup(mageData.dmgType);
+        EditorGUILayout.EndHorizontal();
+
+        //Button, will return false if button is clicked
+        if (GUILayout.Button("Create!", GUILayout.Height(40)))
+        {
+            GeneralSettings.OpenWindow(GeneralSettings.SettingsType.MAGE);
+        }
+
         GUILayout.EndArea();
     }
 
@@ -149,6 +179,17 @@ public class EnemyDesignerWindow : EditorWindow
     {
         GUILayout.BeginArea(rogueSection);
         GUILayout.Label("Rogue");
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Weapon");
+        rogueData.wpnType = (RogueWpnType)EditorGUILayout.EnumPopup(rogueData.wpnType);
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Strategy");
+        rogueData.stratType = (RogueStrategyType)EditorGUILayout.EnumPopup(rogueData.stratType);
+        EditorGUILayout.EndHorizontal();
+
         GUILayout.EndArea();
     }
 
@@ -159,8 +200,42 @@ public class EnemyDesignerWindow : EditorWindow
     {
         GUILayout.BeginArea(warriorSection);
         GUILayout.Label("Warrior");
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Weapon");
+        warriorData.wpnType = (WarriorWpnType)EditorGUILayout.EnumPopup(warriorData.wpnType);
+        EditorGUILayout.EndHorizontal();
+
+        EditorGUILayout.BeginHorizontal();
+        GUILayout.Label("Class");
+        warriorData.classType = (WarriorClassType)EditorGUILayout.EnumPopup(warriorData.classType);
+        EditorGUILayout.EndHorizontal();
+
         GUILayout.EndArea();
     }
 
 
+}
+
+public class GeneralSettings : EditorWindow
+{
+    //pass as a parameter whenever we call openWindow
+    //will specify what enemy was chosen
+    public enum SettingsType
+    {
+        MAGE,
+        WARRIOR,
+        ROGUE
+    }
+
+    static SettingsType dataSetting;
+    static GeneralSettings window;
+
+    public static void OpenWindow(SettingsType setting)
+    {
+        dataSetting = setting;
+        window = (GeneralSettings)GetWindow(typeof(GeneralSettings));
+        window.minSize = new Vector2(250, 200);
+        window.Show();
+    }
 }
