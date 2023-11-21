@@ -40,4 +40,11 @@ namespace Types
         STEALTH,
         SPEED
     }
+
+    public enum dropType
+    {
+        COIN,
+        WEAPON,
+        COLLECTABLE
+    }
 }

@@ -9,4 +9,6 @@ public class MageData : CharacterData
 {
     public MageDmgType dmgType;
     public MageWpnType wpnType;
+    public dropType MageDropType;
+
 }

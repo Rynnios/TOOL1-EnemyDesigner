@@ -9,4 +9,6 @@ public class WarriorData : CharacterData
 {
     public WarriorWpnType wpnType;
     public WarriorClassType classType;
+    public dropType WarriorDropType;
+
 }

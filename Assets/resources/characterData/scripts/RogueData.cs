@@ -9,5 +9,6 @@ public class RogueData : CharacterData
 {
     public RogueWpnType wpnType;
     public RogueStrategyType stratType;
+    public dropType RogueDropType;
      
 }
